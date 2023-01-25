@@ -18,19 +18,29 @@ type SettingsYML struct {
 	Opcoes Options `yaml:"opcoes"`
 }
 
+// Radio is the struct that represents a radio
 type Radio struct {
 	Nome    string `yaml:"nome"`
 	Url     string `yaml:"url"`
 	Pattern string `yaml:"padrao"`
 }
 
+// Options is the struct that represents the options
 type Options struct {
 	ShowQuantity bool `yaml:"mostrar_quantidade"`
 }
 
+// Settings is a SettingsYML struct
+var Settings *SettingsYML
+
+func init() {
+	Settings = ReadYML()
+
+}
+
 // ReadYML read the yml file and return a slice of radios
-func ReadYML() SettingsYML {
-	var settingsYml SettingsYML
+func ReadYML() *SettingsYML {
+	var settingsYml *SettingsYML
 
 	reader, err := os.Open("settings.yml")
 	if err != nil {
@@ -50,7 +60,8 @@ func ReadYML() SettingsYML {
 	return settingsYml
 }
 
-func CreateRadios(settingsYml SettingsYML) []*radio.Radio {
+// CreateRadios create a slice of radios
+func CreateRadios(settingsYml *SettingsYML) []*radio.Radio {
 	var radios []*radio.Radio
 
 	for _, r := range settingsYml.Radios {
@@ -60,6 +71,7 @@ func CreateRadios(settingsYml SettingsYML) []*radio.Radio {
 	return radios
 }
 
-func CreateOptions(settingsYml SettingsYML) *options.Options {
+// CreateOptions create a slice of radios
+func CreateOptions(settingsYml *SettingsYML) *options.Options {
 	return options.NewOptions(settingsYml.Opcoes.ShowQuantity)
 }

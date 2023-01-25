@@ -2,31 +2,8 @@ package main
 
 import (
 	"fmt"
-	"os"
-	"os/exec"
 	"runtime"
 )
-
-func init() {
-	clear = make(map[string]func())
-	clear["linux"] = func() {
-		cmd := exec.Command("clear")
-		cmd.Stdout = os.Stdout
-		cmd.Run()
-	}
-	clear["windows"] = func() {
-		cmd := exec.Command("cmd", "/c", "cls")
-		cmd.Stdout = os.Stdout
-		cmd.Run()
-	}
-}
-
-var Settings SettingsYML
-
-func init() {
-	Settings = ReadYML()
-
-}
 
 func main() {
 	fmt.Println("Buscando ouvintes, aguarde...")
@@ -40,12 +17,9 @@ func main() {
 	main()
 }
 
-// clear is a map with a function for each supported platform
-var clear map[string]func()
-
 // ClearScreen clear the terminal screen
 func ClearScreen() {
-	value, ok := clear[runtime.GOOS]
+	value, ok := Clear[runtime.GOOS]
 	if ok {
 		value()
 	}
