@@ -21,3 +21,16 @@ build-macos:
 		@echo "Building for MacOS..."
 		@GOOS=darwin GOARCH=arm64 go build -o ./bin/macos/arm64/$(NAME)
 		@chmod +x ./bin/macos/arm64/$(NAME)
+
+.PHONY: build
+build: build-windows build-linux build-macos
+
+.PHONY: clean
+clean:
+		@echo "Cleaning..."
+		@rm -rf ./bin
+
+.PHONY: run
+run:
+		@echo "Running..."
+		@go run main.go
