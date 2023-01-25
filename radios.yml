@@ -1,0 +1,12 @@
+radios:
+  - nome: 'Band FM'
+    url: 'https://hts02.kshost.com.br:12688/index.html?sid=1'
+    padrao: 'with (\d+) of .* listeners'
+
+  - nome: 'Clube'
+    url: 'http://hts01.kshost.com.br:9994/index.html?sid=1'
+    padrao: with (\d+) of .* listeners
+
+  - nome: 'Up'
+    url: 'https://audio8.cmaudioevideo.com/proxy/radioupc'
+    padrao: 'listeners \(current\):(\d+)'

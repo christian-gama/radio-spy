@@ -1,6 +1,7 @@
 package radio
 
 import (
+	"fmt"
 	"log"
 	"regexp"
 )
@@ -36,7 +37,7 @@ func (r *Radio) GetListeners() uint32 {
 
 // GetListenersPattern returns the pattern used to extract the number of listeners of the radio
 func (r *Radio) GetListenersPattern() string {
-	return r.listenersPattern
+	return fmt.Sprintf("(?i)%s", r.listenersPattern)
 }
 
 func (r *Radio) SetListeners(listeners uint32) {

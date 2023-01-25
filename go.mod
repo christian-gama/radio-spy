@@ -5,6 +5,7 @@ go 1.19
 require (
 	github.com/PuerkitoBio/goquery v1.8.0
 	github.com/stretchr/testify v1.8.1
+	gopkg.in/yaml.v2 v2.4.0
 )
 
 require (
