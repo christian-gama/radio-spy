@@ -34,8 +34,6 @@ func ClearScreen() {
 	value, ok := clear[runtime.GOOS]
 	if ok {
 		value()
-	} else {
-		panic("Your platform is unsupported! I can't clear terminal screen :(")
 	}
 }
 
