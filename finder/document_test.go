@@ -7,7 +7,7 @@ import (
 )
 
 func TestDocument(t *testing.T) {
-	res := http.GETRequestTo("https://www.google.com")
+	res := http.MustGet("https://www.google.com")
 	doc := Document(res)
 
 	if doc == nil {
@@ -22,6 +22,6 @@ func TestDocumentPanics(t *testing.T) {
 		}
 	}()
 
-	res := http.GETRequestTo("https://www.google.com/404")
+	res := http.MustGet("https://www.google.com/404")
 	Document(res)
 }

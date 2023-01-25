@@ -5,9 +5,9 @@ import (
 	"net/http"
 )
 
-// GETRequestTo returns a response to an HTTP GET request to the url passed as
+// MustGet returns a response to an HTTP GET request to the url passed as
 // a parameter. If the request fails, it panics.
-func GETRequestTo(url string) *http.Response {
+func MustGet(url string) *http.Response {
 	res, err := http.Get(url)
 	if err != nil {
 		log.Panicf("Não foi possível se conectar ao site '%s'", url)

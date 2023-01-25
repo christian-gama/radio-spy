@@ -6,7 +6,7 @@ import (
 )
 
 func TestGETRequestTo(t *testing.T) {
-	res := GETRequestTo("https://www.google.com")
+	res := MustGet("https://www.google.com")
 	if res.StatusCode != nhttp.StatusOK {
 		t.Errorf("Expected status code %d, got %d", nhttp.StatusOK, res.StatusCode)
 	}
@@ -19,7 +19,7 @@ func TestGETRequestToPanics(t *testing.T) {
 		}
 	}()
 
-	GETRequestTo("https://www.google.com/404")
+	MustGet("https://www.google.com/404")
 }
 
 func TestGETRequestPanicsWithInvalidUrl(t *testing.T) {
@@ -29,5 +29,5 @@ func TestGETRequestPanicsWithInvalidUrl(t *testing.T) {
 		}
 	}()
 
-	GETRequestTo("invalid url")
+	MustGet("invalid url")
 }

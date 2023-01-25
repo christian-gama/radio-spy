@@ -39,6 +39,10 @@ func (r *Radio) GetListenersPattern() string {
 	return r.listenersPattern
 }
 
+func (r *Radio) SetListeners(listeners uint32) {
+	r.listeners = listeners
+}
+
 // validate validates that the radio is correctly configured
 func (r *Radio) validate() {
 	if r.name == "" {
