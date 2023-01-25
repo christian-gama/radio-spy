@@ -29,9 +29,9 @@ func TestRadio_GetUrl(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			r := &Radio{
-				Name:      tt.fields.name,
-				Url:       tt.fields.url,
-				Listeners: tt.fields.listeners,
+				name:      tt.fields.name,
+				url:       tt.fields.url,
+				listeners: tt.fields.listeners,
 			}
 
 			assert.Equal(t, tt.want, r.GetUrl(), "expected %d, got %d", tt.want, r.GetUrl())
@@ -64,9 +64,9 @@ func TestRadio_GetName(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			r := &Radio{
-				Name:      tt.fields.name,
-				Url:       tt.fields.url,
-				Listeners: tt.fields.listeners,
+				name:      tt.fields.name,
+				url:       tt.fields.url,
+				listeners: tt.fields.listeners,
 			}
 
 			assert.Equal(t, tt.want, r.GetName(), "expected %d, got %d", tt.want, r.GetName())
@@ -101,9 +101,9 @@ func TestRadio_GetListeners(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			r := &Radio{
-				Name:      tt.fields.name,
-				Url:       tt.fields.url,
-				Listeners: tt.fields.listeners,
+				name:      tt.fields.name,
+				url:       tt.fields.url,
+				listeners: tt.fields.listeners,
 			}
 
 			assert.Equal(t, tt.want, r.GetListeners(), "expected %d, got %d", tt.want, r.GetListeners())
@@ -131,10 +131,10 @@ func TestNewRadio(t *testing.T) {
 				listenersPattern: "([0-9]+)",
 			},
 			want: &Radio{
-				Name:             "Rádio 1",
-				Url:              "http://www.radio1.com.br",
-				Listeners:        0,
-				ListenersPattern: "([0-9]+)",
+				name:             "Rádio 1",
+				url:              "http://www.radio1.com.br",
+				listeners:        0,
+				listenersPattern: "([0-9]+)",
 			},
 			panics: false,
 		},
@@ -146,10 +146,10 @@ func TestNewRadio(t *testing.T) {
 				listenersPattern: "([0-9]+)",
 			},
 			want: &Radio{
-				Name:             "",
-				Url:              "http://www.radio1.com.br",
-				Listeners:        0,
-				ListenersPattern: "([0-9]+)",
+				name:             "",
+				url:              "http://www.radio1.com.br",
+				listeners:        0,
+				listenersPattern: "([0-9]+)",
 			},
 			panics: true,
 		},
@@ -161,10 +161,10 @@ func TestNewRadio(t *testing.T) {
 				listenersPattern: "([0-9]+)",
 			},
 			want: &Radio{
-				Name:             "Rádio 1",
-				Url:              "",
-				Listeners:        0,
-				ListenersPattern: "([0-9]+)",
+				name:             "Rádio 1",
+				url:              "",
+				listeners:        0,
+				listenersPattern: "([0-9]+)",
 			},
 			panics: true,
 		},
@@ -176,10 +176,10 @@ func TestNewRadio(t *testing.T) {
 				listenersPattern: "",
 			},
 			want: &Radio{
-				Name:             "Rádio 1",
-				Url:              "http://www.radio1.com.br",
-				Listeners:        0,
-				ListenersPattern: "/",
+				name:             "Rádio 1",
+				url:              "http://www.radio1.com.br",
+				listeners:        0,
+				listenersPattern: "/",
 			},
 			panics: true,
 		},

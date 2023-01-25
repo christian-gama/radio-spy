@@ -21,6 +21,13 @@ func init() {
 	}
 }
 
+var Settings SettingsYML
+
+func init() {
+	Settings = ReadYML()
+
+}
+
 func main() {
 	fmt.Println("Buscando ouvintes, aguarde...")
 	result := Spy()
