@@ -13,3 +13,5 @@ radios:
 
 opcoes:
   mostrar_quantidade: false #[true|false]
+  servidor: true #[true|false]
+  porta: 5000 # caso o servidor seja true, informe a porta

@@ -15,3 +15,4 @@ Run tests with the command `make test`
 ### Note
 - The program requires internet connection to search for the current listeners of the radios.
 - The program currently only searches for three specific radios in Vitória da Conquista, Bahia, but this can be easily modified in the code to search for other radios or in other locations.
+- You can choose to run as a script or as a http server, by changing the `settings.yml` file.

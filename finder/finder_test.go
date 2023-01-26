@@ -23,7 +23,7 @@ func TestFindListeners(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := FindListeners(tt.args.pattern, tt.args.html); got != tt.want {
+			if got, _ := FindListeners(tt.args.pattern, tt.args.html); got != tt.want {
 				t.Errorf("FindListeners() = %v, want %v", got, tt.want)
 			}
 		})

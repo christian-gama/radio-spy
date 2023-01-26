@@ -4,6 +4,9 @@ import (
 	"fmt"
 	"log"
 	"regexp"
+
+	"github.com/christian-gama/radio-spy/finder"
+	"github.com/christian-gama/radio-spy/yml"
 )
 
 // Radio is a struct that represents a radio and its metadata
@@ -84,4 +87,60 @@ func NewRadio(name string, url string, listenersPattern string) *Radio {
 	radio.validate()
 
 	return radio
+}
+
+// PopulateRadio get the listeners from the radios and set the listeners value
+func PopulateRadio(radios []*Radio) ([]*Radio, uint32) {
+	var totalListeners uint32
+
+	for _, radio := range radios {
+		listeners, err := SetListenersFromURL(radio)
+		if err != nil {
+			log.Printf(`Erro: "%v"`, err)
+		}
+
+		radio.SetListeners(listeners)
+		totalListeners += listeners
+	}
+
+	return radios, totalListeners
+}
+
+// SetListenersFromURL get the listeners from the radio url and set the listeners value
+func SetListenersFromURL(radio *Radio) (listeners uint32, err error) {
+	defer func() {
+		if err != nil {
+			radio.SetListeners(0)
+		} else {
+			radio.SetListeners(listeners)
+		}
+	}()
+
+	res, err := finder.Get(radio.GetUrl())
+	if err != nil {
+		return 0, err
+	}
+
+	doc, err := finder.Document(res)
+	if err != nil {
+		return 0, err
+	}
+
+	listeners, err = finder.FindListeners(radio.GetListenersPattern(), doc.Text())
+	if err != nil {
+		return 0, err
+	}
+
+	return listeners, nil
+}
+
+// UnmarshalRadios create a slice of radios
+func UnmarshalRadios(settingsYml *yml.SettingsYml) []*Radio {
+	var radios []*Radio
+
+	for _, r := range settingsYml.Radios {
+		radios = append(radios, NewRadio(r.Nome, r.Url, r.Pattern))
+	}
+
+	return radios
 }

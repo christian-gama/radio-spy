@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Radio Spy</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body>
+  <p class="text-left font-bold mb-4 text-gray-700 md:text-xl text-lg">
+    Quantidade de ouvintes (em porcentagem) por rádio - {{ .Now }}
+  </p>
+
+  <table class="md:table-auto table-striped w-full max-w-md">
+    <thead>
+      <tr class="bg-gray-200">
+        <th scope="col" class="px-4 py-2 text-gray-800 text-left">Rádio</th>
+        <th scope="col" class="px-4 py-2 text-gray-800 text-left">Ouvintes</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      {{ range .Radios }}
+      <tr class="hover:bg-gray-50">
+        <td class="px-4 py-2 text-gray-700 text-left">
+          {{ .Name }}
+        </td>
+
+        <td class="px-4 py-2 text-gray-700 text-left">
+          {{ if eq .Listeners 0}} {{ .Percentage }} {{else}} {{ .Listeners }} ({{ .Percentage }}) {{end}}
+        </td>
+      </tr>
+      {{ end }}
+    </tbody>
+  </table>
+</body>
+
+</html>

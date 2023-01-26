@@ -1,20 +1,27 @@
 package main
 
 import (
-	"fmt"
 	"runtime"
+
+	"github.com/christian-gama/radio-spy/options"
+	"github.com/christian-gama/radio-spy/radio"
+	"github.com/christian-gama/radio-spy/yml"
 )
 
-func main() {
-	fmt.Println("Buscando ouvintes, aguarde...")
-	result := Spy()
-	ClearScreen()
+func init() {
+	yml.Settings = yml.ReadYML()
+}
 
-	fmt.Println(result)
-	fmt.Print("Pressione ENTER para repetir a busca ou CTRL+C para sair...")
-	fmt.Scanln()
-	ClearScreen()
-	main()
+func main() {
+	options := options.UnmarshalOptions(yml.Settings)
+	radios := radio.UnmarshalRadios(yml.Settings)
+
+	if options.Server {
+		Server(radios, options)
+	} else {
+		Executable(radios, options)
+	}
+
 }
 
 // ClearScreen clear the terminal screen

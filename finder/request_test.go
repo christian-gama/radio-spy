@@ -1,4 +1,4 @@
-package http
+package finder
 
 import (
 	nhttp "net/http"
@@ -6,28 +6,23 @@ import (
 )
 
 func TestGETRequestTo(t *testing.T) {
-	res := MustGet("https://www.google.com")
+	res, _ := Get("https://www.google.com")
 	if res.StatusCode != nhttp.StatusOK {
 		t.Errorf("Expected status code %d, got %d", nhttp.StatusOK, res.StatusCode)
 	}
 }
 
 func TestGETRequestToPanics(t *testing.T) {
-	defer func() {
-		if r := recover(); r == nil {
-			t.Errorf("The code did not panic")
-		}
-	}()
-
-	MustGet("https://www.google.com/404")
+	_, err := Get("https://www.google.com/404")
+	if err == nil {
+		t.Errorf("Expected an error, got nil")
+	}
 }
 
 func TestGETRequestPanicsWithInvalidUrl(t *testing.T) {
-	defer func() {
-		if r := recover(); r == nil {
-			t.Errorf("The code did not panic")
-		}
-	}()
+	_, err := Get("invalid url")
+	if err == nil {
+		t.Errorf("Expected an error, got nil")
+	}
 
-	MustGet("invalid url")
 }
