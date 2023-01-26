@@ -21,7 +21,7 @@ func Home(radios []*radio.Radio, options *options.Options) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		t, err := template.ParseFiles("index.html")
 		if err != nil {
-			log.Panicf("Não foi possível ler o arquivo index.gohtml")
+			log.Panicf("Não foi possível ler o arquivo index.html")
 		}
 
 		var radioData []*RadioData
