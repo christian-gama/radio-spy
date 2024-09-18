@@ -1,42 +1,135 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="pt-br">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Radio Spy</title>
+		<script src="https://cdn.tailwindcss.com"></script>
+		<link
+			href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+	</head>
+	<body class="bg-gray-50 font-sans">
+		<div class="container mx-auto px-4 py-8">
+			<h1 class="text-3xl font-bold text-gray-800 mb-6">Radio Spy</h1>
+			<div class="bg-white rounded-lg shadow-md p-6 mb-8">
+				<h2 class="text-xl font-semibold text-gray-700 mb-4">
+					Distribuição de Ouvintes por Rádio - {{ .Now }}
+				</h2>
+				<div class="mb-4">
+					<canvas
+						id="listenerChart"
+						data-labels="{{- range .Radios -}}{{- if ne .Name "" }},{{ end -}}{{ .Name }}{{- end -}}"
+						data-values="{{- range .Radios -}}{{- if ne .Name "" }},{{ end -}}{{ .Percentage }}{{- end -}}"
+					></canvas>
+				</div>
+				<div id="noDataMessage" class="text-center text-gray-500 my-4" style="display: none;">
+					Nenhum ouvinte registrado no momento
+				</div>
+				<div class="overflow-x-auto">
+					<table class="min-w-full divide-y divide-gray-200">
+						<thead class="bg-gray-50">
+							<tr>
+								<th
+									scope="col"
+									class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+								>
+									Rádio
+								</th>
+								<th
+									scope="col"
+									class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+								>
+									Ouvintes
+								</th>
+							</tr>
+						</thead>
+						<tbody class="bg-white divide-y divide-gray-200">
+							{{ range .Radios }}
+							<tr class="hover:bg-gray-50 transition-colors">
+								<td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+									{{ .Name }}
+								</td>
+								<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+									{{ if ne .Listeners 0 }}{{ .Listeners }} {{ end }}({{ .Percentage }})
+								</td>
+							</tr>
+							{{ end }}
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+		<script>
+			document.addEventListener('DOMContentLoaded', function() {
+				const chart = document.getElementById("listenerChart");
+				const noDataMessage = document.getElementById("noDataMessage");
 
-<head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Radio Spy</title>
+				const labels = chart.dataset.labels.split(",").filter(Boolean);
+				const data = chart.dataset.values.split(",").filter(Boolean).map(value => parseFloat(value.replace('%', '')));
 
-  <script src="https://cdn.tailwindcss.com"></script>
-</head>
+				if (labels.length > 0 && data.length > 0) {
+					new Chart(chart, {
+						type: "bar",
+						data: {
+							labels: labels,
+							datasets: [
+								{
+									label: "Porcentagem de Ouvintes",
+									data: data,
+									backgroundColor: "rgba(59, 130, 246, 0.5)",
+									borderColor: "rgb(59, 130, 246)",
+									borderWidth: 1,
+								},
+							],
+						},
+						options: {
+							responsive: true,
+							plugins: {
+								legend: {
+									position: 'top',
+								},
+								title: {
+									display: true,
+									text: 'Distribuição de Ouvintes por Rádio'
+								}
+							},
+							scales: {
+								y: {
+									beginAtZero: true,
+									suggestedMax: Math.max(...data) * 1.1,
+									title: {
+										display: true,
+										text: 'Porcentagem de Ouvintes'
+									},
+									ticks: {
+										callback: function(value) {
+											return value + '%';
+										}
+									}
+								},
+								x: {
+									title: {
+										display: true,
+										text: 'Rádio'
+									}
+								}
+							},
+						},
+					});
 
-<body>
-  <p class="text-left font-bold mb-4 text-gray-700 md:text-xl text-lg">
-    Quantidade de ouvintes (em porcentagem) por rádio - {{ .Now }}
-  </p>
-
-  <table class="md:table-auto table-striped w-full max-w-md">
-    <thead>
-      <tr class="bg-gray-200">
-        <th scope="col" class="px-4 py-2 text-gray-800 text-left">Rádio</th>
-        <th scope="col" class="px-4 py-2 text-gray-800 text-left">Ouvintes</th>
-      </tr>
-    </thead>
-
-    <tbody>
-      {{ range .Radios }}
-      <tr class="hover:bg-gray-50">
-        <td class="px-4 py-2 text-gray-700 text-left">
-          {{ .Name }}
-        </td>
-
-        <td class="px-4 py-2 text-gray-700 text-left">
-          {{ if eq .Listeners 0}} {{ .Percentage }} {{else}} {{ .Listeners }} ({{ .Percentage }}) {{end}}
-        </td>
-      </tr>
-      {{ end }}
-    </tbody>
-  </table>
-</body>
-
+					if (data.every(value => value === 0)) {
+						noDataMessage.style.display = 'block';
+					}
+				} else {
+					console.error('No data available for the chart');
+					chart.style.display = 'none';
+					noDataMessage.style.display = 'block';
+					noDataMessage.textContent = 'Erro: Dados não disponíveis para o gráfico';
+				}
+			});
+		</script>
+	</body>
 </html>
