@@ -4,8 +4,8 @@ radios:
     padrao: 'with (\d+) of .* listeners'
 
   - nome: "Clube"
-    url: "http://hts01.kshost.com.br:9994/index.html?sid=1"
-    padrao: with (\d+) of .* listeners
+    url: "https://hts01.brascast.com:9994"
+    padrao: 'listeners \(current\):\n\s+(\d+)'
 
   - nome: "Up"
     url: "https://audio8.cmaudioevideo.com/proxy/radioupc"
