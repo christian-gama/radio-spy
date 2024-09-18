@@ -23,7 +23,7 @@ func FindListeners(pattern string, html string) (uint32, error) {
 
 		listeners = uint32(listenersUint64)
 	} else {
-		log.Printf("Não foi possível encontrar o padrão '%s' no HTML do site.", pattern)
+		log.Printf("Não foi possível encontrar o padrão '%s' no HTML do site: %s", pattern, html)
 	}
 
 	return listeners, nil

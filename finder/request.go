@@ -1,21 +1,65 @@
 package finder
 
 import (
+	"bytes"
 	"fmt"
-	"net/http"
+	"io"
+	"net"
+	"net/url"
+	"time"
 )
 
-// Get returns a response to an HTTP GET request to the url passed as
-// a parameter. If the request fails, it panics.
-func Get(url string) (*http.Response, error) {
-	res, err := http.Get(url)
+// Get retrieves the content from the given URL and returns it as a byte slice.
+// If the request fails, it returns an error.
+func Get(urlStr string) ([]byte, error) {
+	parsedURL, err := url.Parse(urlStr)
 	if err != nil {
-		return nil, fmt.Errorf("Ocorreu um erro ao tentar fazer uma requisição GET para o site '%s'. Por favor, verifique se o site está disponível.", url)
+		return nil, fmt.Errorf("Erro ao analisar a URL '%s': %v", urlStr, err)
 	}
 
-	if res.StatusCode != http.StatusOK {
-		return nil, fmt.Errorf("Ocorreu um erro ao tentar fazer uma requisição GET para o site '%s'. Por favor, verifique se o site está disponível.", url)
+	// Determine host and port
+	host := parsedURL.Hostname()
+	port := parsedURL.Port()
+	if port == "" {
+		if parsedURL.Scheme == "https" {
+			port = "443"
+		} else {
+			port = "80"
+		}
 	}
 
-	return res, nil
+	// Create a connection
+	conn, err := net.DialTimeout("tcp", net.JoinHostPort(host, port), 30*time.Second)
+	if err != nil {
+		return nil, fmt.Errorf("Erro ao conectar com '%s': %v", urlStr, err)
+	}
+	defer conn.Close()
+
+	path := parsedURL.Path
+	if path == "" {
+		path = "/"
+	}
+	if parsedURL.RawQuery != "" {
+		path += "?" + parsedURL.RawQuery
+	}
+	fmt.Fprintf(
+		conn,
+		"GET %s HTTP/1.0\r\nHost: %s\r\nAccept-Encoding: identity\r\n\r\n",
+		path,
+		host,
+	)
+
+	var buf bytes.Buffer
+	_, err = io.Copy(&buf, conn)
+	if err != nil && err != io.EOF {
+		return nil, fmt.Errorf("Erro ao ler a resposta de '%s': %v", urlStr, err)
+	}
+
+	response := buf.Bytes()
+	parts := bytes.SplitN(response, []byte("\r\n\r\n"), 2)
+	if len(parts) != 2 {
+		return nil, fmt.Errorf("Resposta inválida de '%s'", urlStr)
+	}
+
+	return parts[1], nil
 }

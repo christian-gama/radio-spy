@@ -61,9 +61,14 @@ func (r *Radio) validate() {
 		log.Panic("A URL da rádio não pode ser vazia")
 	}
 
-	urlRegex := regexp.MustCompile(`^(http|https)://[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$`)
+	urlRegex := regexp.MustCompile(
+		`^(http|https)://(([a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5})|((\d{1,3}\.){3}\d{1,3}))(:[0-9]{1,5})?(\/.*)?$`,
+	)
 	if !urlRegex.MatchString(r.url) {
-		log.Panicf("A URL da rádio é inválida. Espera-se o formato http://www.exemplo.com ou https://www.exemplo.com, mas foi usado %s", r.url)
+		log.Panicf(
+			"A URL da rádio é inválida. Espera-se o formato http://www.exemplo.com ou https://www.exemplo.com, mas foi usado %s",
+			r.url,
+		)
 	}
 
 	if r.listenersPattern == "" {

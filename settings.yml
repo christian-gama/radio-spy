@@ -1,17 +1,25 @@
 radios:
-  - nome: 'Band FM'
-    url: 'https://hts02.kshost.com.br:12688/index.html?sid=1'
+  - nome: "Band FM"
+    url: "https://hts02.kshost.com.br:12688/index.html?sid=1"
     padrao: 'with (\d+) of .* listeners'
 
-  - nome: 'Clube'
-    url: 'http://hts01.kshost.com.br:9994/index.html?sid=1'
+  - nome: "Clube"
+    url: "http://hts01.kshost.com.br:9994/index.html?sid=1"
     padrao: with (\d+) of .* listeners
 
-  - nome: 'Up'
-    url: 'https://audio8.cmaudioevideo.com/proxy/radioupc'
+  - nome: "Up"
+    url: "https://audio8.cmaudioevideo.com/proxy/radioupc"
     padrao: 'listeners \(current\):(\d+)'
+
+  - nome: "UESB"
+    url: "http://200.128.67.125:8001"
+    padrao: 'listeners \(current\):(\d+)'
+
+  - nome: "Brasil"
+    url: "http://srv47.brasilstream.com.br:8533/stream.xspf"
+    padrao: 'Current Listeners: (\d+)'
 
 opcoes:
   mostrar_quantidade: false #[true|false]
   servidor: true #[true|false]
-  porta: 5000 # caso o servidor seja true, informe a porta
+  porta: 8080 # caso o servidor seja true, informe a porta
